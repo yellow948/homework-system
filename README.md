@@ -27,7 +27,6 @@
   基于Python3.6，安装项目运行环境：pip install -r requirements.txt
 
 
-
 四.项目运行配置
 
   要使该项目运行起来主要需要配置你的数据库：在app.py文件中，第16行处配置你的数据库信息；
