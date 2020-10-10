@@ -39,6 +39,10 @@ compat.py,utils.py,qiniuyun.py是七牛云提供的python上传文件的Demo。
 六.其他
 
 数据库表的字段展示：
+
 students: id,stu_name,stu_num_gdit
+
 homework: id,title,status,describe,create_time,deadline,addtional_name
+
 upload_list: id,stu_name,stu_num,is_upload,upload_time,homework_id,url
+
