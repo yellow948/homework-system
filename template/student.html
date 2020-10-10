@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Index-UFS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+  <link rel="alternate icon" type="image/png" href="static/i/favicon.png">
+  <link rel="stylesheet" type="text/css" href="static/basic.min.css">
+  <link rel="stylesheet" type="text/css" href="static/dropzone.min.css">
+
+  <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+
+  <style>
+    .header {
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+
+    .header p {
+      font-size: 14px;
+    }
+
+    .dropzone {
+      border: 2px dashed #0087F7;
+      border-radius: 5px;
+      background: white;
+    }
+
+    .center {
+      text-align: center;
+    }
+  </style>
+
+  <script src="static/dropzone.min.js"></script>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="am-g">
+      <h1>Upload File System</h1>
+      <br>
+    </div>
+  </div>
+
+  <div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered" style="width: 70%;">
+      <p id="info" style="color: #0b76ac;"></p>
+      <table class="am-table am-table-striped am-table-hover table-main am-table-bordered"
+        style="margin-bottom: 2.6rem;">
+        <thead>
+          <tr>
+            <th class="table-title">作业标题</th>
+            <th class="table-title">作业描述</th>
+            <th class="table-type center">截至时间</th>
+            <th class="table-type center">创建日期</th>
+            <th class="table-type center">提交状态</th>
+            <th class="table-type center">提交时间</th>
+            <th class="table-set center">操作</th>
+          </tr>
+        </thead>
+
+        <tbody id="tbody">
+        </tbody>
+      </table>
+      <div style="margin-top:-16px;">
+        <button type="button" class="am-btn am-btn-secondary am-btn-xs am-round" onclick="showMoreHomeWork()">点击加载更多作业</button>
+        <!-- <a style="color: #5eb95e; font-size: 15px;" href="#" onclick="showMoreHomeWork()">点击加载更多作业......</a> -->
+      </div>
+
+
+      <hr>
+      <div id="uploading" style="margin-bottom: 6px; color: #0b76ac;"></div>
+      <form action="https://upload-z2.qiniup.com" class="dropzone needsclick dz-clickable" id="my-dropzone"
+        method="POST" enctype="multipart/form-data" style="display: none;">
+        <div class="dz-message needsclick">
+          文件拖拽到此处，或点击此处<br>
+          <span class="note needsclick">(只支持zip/rar格式，文件名称自定义)</span>
+        </div>
+        <input name="workname" type="hidden" value="123">
+        <input name="token" type="hidden" id="token">
+        <input name="key" type="hidden" id="key">
+      </form>
+
+      <div style="padding-top: 8px;float: left;color:grey;font-size:14px;">
+      </div>
+
+      <div style="padding-top: 12px;float: right;">
+        <p onclick="openObj()">© 2020 Yellow（项目开源说明）</p>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.min.js"></script>
+
+<script type="text/javascript">
+  // 获取上传文件凭证
+  $.ajax({
+    url: "/api/v1/getBucket",
+    type: "get",
+    success: function (res) {
+      $('#token').val(res);
+    }
+  });
+
+  // fix me 
+  function openObj() {
+    alert(
+      "1.项目下载地址：https://github.com/yellow948/homework-system\n2.若你有新的功能想添加，你可以下载源码进一步开发，或者开放你的接口，实现本项目的对接，与我联系：yellow948@163.com"
+    )
+  }
+
+  // 日期格式化
+  function formatDate(date) {
+    var date = new Date(date);
+    var YY = date.getFullYear() + '-';
+    var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+    var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+    var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+    var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+    var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+    return YY + MM + DD + " " + hh + mm + ss;
+  }
+
+  var homeList = []
+
+  var selectIndex = 0
+  var info = {}
+  var homeworkList = []
+  var hid = 0
+  var ids = []
+
+  // 显示提交框
+  function showSubmit(index) {
+    layer.msg('请在表格下方提交你的文件');
+    selectIndex = index
+    $('#my-dropzone').css("display", "block"); // 显示提交框
+    for (var i = 0; i < ids.length; i++) {
+      $(`#td_${ids[i]}`).removeClass("am-active")
+    }
+    if (homeworkList[index].status == 0) {
+      alert("当前作业不可提交，请联系学委！")
+      $("#uploading").html("")
+      $('#my-dropzone').css("display", "none");
+      return
+    }
+    $(`#td_${homeworkList[index].id}`).addClass("am-active")
+    $("#uploading").html(`当前提交的作业：${homeworkList[index].title}`)
+  }
+
+  // 退出登录
+  function logout() {
+    $.post('/api/v1/logout', function (res) {
+      window.location.reload()
+    })
+  }
+
+  // 初始化获取作业列表
+  function getHomeworkList(page, limit) {
+    // 获取作业列表
+    $.get(`/api/v1/getHomework?page=${page}&limit=${limit}`, function (res) {
+      let sex = res.info.sex == '男' ? '小帅哥' : '小可爱'
+      $("#info").html(
+        `我是<${res.info.stu_name}>${sex}！<a style='font-size:14px;color: #F37B1D;' href="#" onclick="logout()">(搞错了,我不是)</a>`
+      )
+
+      info = res.info
+
+      let data = res.data;
+
+      if (data.length == 0) {
+        nowPage--;
+        alert("所以的作业都在这了！还不够嘛？你这么喜欢做作业？")
+        return;
+      }
+
+      for (var i = 0; i < data.length; i++) {
+        ids.push(data[i].id)
+        homeworkList.push(data[i])
+
+        // 创建时间
+        let date = formatDate(parseInt(data[i].create_time + "000"))
+
+        // 截至提交
+        let stop = "---"
+        if (data[i].deadline != 0) {
+          let days_str = res.now - data[i].create_time;
+          let days = parseInt(days_str) / (24 * 3600)
+          stop = data[i].deadline - parseInt(days) + " 天后"
+        }
+        if (data[i].status == 0) {
+          stop = '已截止'
+        }
+
+        // 提交状态
+        let uploadStaus = data[i].is_upload == 1 ? "<td style='color: #5eb95e; text-align: center;'>已提交</td>" :
+          "<td style='color: #dd514c; text-align: center;'>未提交</td>"
+
+        // 提交时间
+        let upload_time = "---"
+        let upload_opear = '提 交'
+        if (data[i].is_upload == 1) {
+          upload_time = formatDate(parseInt(data[i].upload_time + "000"))
+          upload_opear = '再次提交'
+        }
+
+        $("#tbody").append(`<tr id="td_${data[i].id}">
+                              <td><a href="#">${data[i].title}</a></td>
+                              <td>${data[i].describe}</td>
+                              <td class="center">${stop}</td>
+                              <td class="am-hide-sm-only center">${date}</td>
+                              ${uploadStaus}
+                              <td class="center">${upload_time}</td>
+                              <td class='center'>
+                                <div class="">
+                                  <div class="am-btn-group am-btn-group-xs ">
+                                    <button type="button" class="am-btn am-btn-default am-radius" onclick="showSubmit(${i})">
+                                      <span class="am-icon-upload"></span> ${upload_opear}</button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>`)
+      }
+    })
+  }
+
+  // 监听上传文件
+  Dropzone.options.myDropzone = {
+    autoProcessQueue: true,
+    maxFiles: 1,
+    dictMaxFilesExceeded: "只能上传1个文件",
+    acceptedFiles: ".zip,.rar",
+    dictInvalidFileType: "只支持上传zip文件",
+    addRemoveLinks: true,
+    dictRemoveLinks: "删除",
+
+    init: function () {
+      // var submitButton = document.querySelector("#submit-all")
+      // myDropzone = this;
+
+      // submitButton.addEventListener("click", function () {
+      //   myDropzone.processQueue();
+      // });
+
+      // 文件添加事件
+      this.on("addedfile", function (data) {
+        let fileFormList = data.name.split(".")
+        let fileForm = fileFormList[fileFormList.length - 1]; // 用户上传的文件后缀
+
+        let addtionName = homeworkList[selectIndex].addtional_name == '' ? "" : "-" + homeworkList[
+          selectIndex].addtional_name
+        let uploadName = info['stu_num'] + '-' + info['stu_name'] + addtionName + "-" + homeworkList[
+          selectIndex].id + Math.random().toString(36).slice(-4) + "." + fileForm
+
+        $('#key').val(uploadName); // 上传的文件名称
+      });
+
+      // 文件上传成功事件
+      this.on("success", function (file, data) {
+        if (data != null && data != "") {
+          let fileName = data.key
+          let url = "http://cdn.loststars.cn/" + fileName
+          $.post('/api/v1/upload', {
+            url,
+            hid: homeworkList[selectIndex].id
+          }, function (res) {
+            if (res.code == 200) {
+              alert("提交成功")
+              window.location.reload()
+            }
+          })
+        }
+      });
+
+      //上传失败触发的事件
+      this.on("error", function (file, data) {});
+    }
+  };
+
+
+  var nowPage = 1
+  getHomeworkList(nowPage, 5)
+
+  function showMoreHomeWork() {
+    ++nowPage
+    getHomeworkList(nowPage, 5)
+  }
+</script>
+
+</html>

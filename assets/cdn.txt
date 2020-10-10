@@ -1,0 +1,13 @@
+https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css
+https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.css
+https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.flat.min.css
+https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.flat.css
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.min.js
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.js
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.ie8polyfill.min.js
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.ie8polyfill.js
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.widgets.helper.min.js
+https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.widgets.helper.js
+
+https://cdn.bootcss.com/jquery/3.2.1/jquery.js
+https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js

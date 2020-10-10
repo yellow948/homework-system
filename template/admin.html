@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Admin</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+  <meta name="description" content="">
+  <meta name="keywords" content="table">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+  <link rel="icon" type="image/png" href="static/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="static/i/app-icon72x72@2x.png">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+  <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.css">
+  <link rel="stylesheet" href="static/admin.css" />
+</head>
+
+<body>
+
+  <header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+      <strong>Admin Of Upload File System</strong>
+    </div>
+
+    <!-- <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+      data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
+        class="am-icon-bars"></span></button> -->
+
+  </header>
+
+  <div class="am-cf admin-main">
+    <!-- <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+        <li class="admin-parent">
+          <a class="am-cf" data-am-collapse="{target: '#collapse-nav'}"><span class="am-icon-file"></span> 页面模块 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+          <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav">
+            <li><a href="admin-user.html" class="am-cf"><span class="am-icon-check"></span> 个人资料<span class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+            <li><a href="admin-help.html"><span class="am-icon-puzzle-piece"></span> 帮助页</a></li>
+            <li><a href="admin-gallery.html"><span class="am-icon-th"></span> 相册页面<span class="am-badge am-badge-secondary am-margin-right am-fr">24</span></a></li>
+            <li><a href="admin-log.html"><span class="am-icon-calendar"></span> 系统日志</a></li>
+            <li><a href="admin-404.html"><span class="am-icon-bug"></span> 404</a></li>
+          </ul>
+        </li>
+        <li><a href="admin-table.html"><span class="am-icon-table"></span> 表格</a></li>
+        <li><a href="admin-form.html"><span class="am-icon-pencil-square-o"></span> 表单</a></li>
+        <li><a href="#"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-bookmark"></span> 公告</p>
+          <p>时光静好，与君语；细水流年，与君同。—— Amaze UI</p>
+        </div>
+      </div>
+
+      <div class="am-panel am-panel-default admin-sidebar-panel">
+        <div class="am-panel-bd">
+          <p><span class="am-icon-tag"></span> wiki</p>
+          <p>Welcome to the Amaze UI wiki!</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+    <!-- content start -->
+    <div class="admin-content">
+      <div class="admin-content-body">
+        <div class="am-cf am-padding am-padding-bottom-0">
+          <!-- <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">表格</strong> / <small>Table</small></div> -->
+        </div>
+        <div class="am-g">
+          <div class="am-u-sm-12 am-u-md-6">
+            <div class="am-btn-toolbar">
+              <div class="am-btn-group am-btn-group-xs">
+                <button style="margin-left:10px;" type="button" class="am-btn am-btn-success" onclick="toAdd()"><span
+                    class="am-icon-plus"></span> 添加作业</button>
+                <button style="margin-left:10px;" type="button" class="am-btn am-btn-success" onclick='downloadFile()'>
+                  <span class="am-icon-download"></span>
+                  下载全部
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+
+        <div class="am-g">
+          <div class="am-u-sm-12">
+            <form class="am-form">
+              <table class="am-table am-table-striped am-table-hover table-main am-table-bordered">
+                <thead>
+                  <tr>
+                    <th class="table-id">ID</th>
+                    <th class="table-title">作业标题</th>
+                    <th class="table-title">作业描述</th>
+                    <th class="table-title">作业命名后缀</th>
+                    <th class="table-type">提交状态</th>
+                    <th class="table-type">提交期限</th>
+                    <th class="table-type ">创建日期</th>
+                    <th class="table-set">操作</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tbody">
+                </tbody>
+              </table>
+
+              <div><a style="color: #0e90d2; font-size: 15px;" href="#" onclick="showMoreHomeWork()">点击加载更多作业......</a></div>
+
+              <hr />
+
+              <table class="am-table am-table-striped am-table-hover table-main ">
+                <thead>
+                  <tr>
+                    <th class="table-id">ID</th>
+                    <th class="table-title">姓名</th>
+                    <th class="table-type">学号</th>
+                    <th class="table-type">上传状态</th>
+                    <th class="table-date am-hide-sm-only">提交日期</th>
+                    <th class="table-set">操作</th>
+                  </tr>
+                </thead>
+
+                <tbody id="tbody1">
+                </tbody>
+              </table>
+
+              <!-- <p>注：.....</p> -->
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- content end -->
+  </div>
+
+  <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu"
+    data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.min.js"></script>
+
+  <script type="text/javascript">
+    (function ($) {
+      'use strict';
+      $(function () {
+        var $fullText = $('.admin-fullText');
+        $('#admin-fullscreen').on('click', function () {
+          $.AMUI.fullscreen.toggle();
+        });
+
+        $(document).on($.AMUI.fullscreen.raw.fullscreenchange, function () {
+          $fullText.text($.AMUI.fullscreen.isFullscreen ? '退出全屏' : '开启全屏');
+        });
+      });
+    })(jQuery);
+
+    // 格式化日期（时间戳->时间格式化）
+    function formatDate(date) {
+      var date = new Date(date);
+      var YY = date.getFullYear() + '-';
+      var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+      var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+      var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+      var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+      var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+      return YY + MM + DD + " " + hh + mm + ss;
+    }
+
+    // 待下载列表
+    var downloadList = []
+    var ids = []
+
+    // 执行下载文件（多文件）
+    function downloadFile() {
+      if (downloadList.length == 0) {
+        alert("无可下载的资源");
+        return;
+      }
+      for (var i = 0; i < downloadList.length; i++) {
+        let iframe = document.createElement("iframe")
+        iframe.style.display = "none"
+        iframe.style.height = 0
+        iframe.src = downloadList[i];
+        $("body").append(iframe); // 修复firefox中无法触发click
+      }
+
+      // 同源URL
+      // var a = document.createElement("a");
+      // a.download = fileName
+      // a.href = content;
+      // a.target = "_blank";
+      // $("body").append(a); // 修复firefox中无法触发click
+      // a.click();
+      // $(a).remove();
+    }
+
+    // 执行下载文件（单文件）
+    function downloadAFile(url) {
+      let iframe = document.createElement("iframe")
+      iframe.style.display = "none"
+      iframe.style.height = 0
+      iframe.src = url;
+      $("body").append(iframe);
+    }
+
+    function toAdd() {
+      window.location.href = "/admin/add-homework";
+    }
+
+    // 删除作业
+    function delHomeWork(hid) {
+      if (confirm("确定要删除吗？")) {
+        $.post(`/api/v1/delHomework`, {
+          hid
+        }, function (res) {
+          if (res.code == 200) {
+            window.location.reload()
+            alert("删除成功");
+          } else {
+            alert("删除失败");
+          }
+        })
+      }
+    }
+
+
+    // 显示某个作业的提交情况
+    function showDetail(homework_id) {
+      for (var i = 0; i < ids.length; i++) {
+        $(`#tr_${ids[i]}`).removeClass("am-active")
+      }
+      $(`#tr_${homework_id}`).addClass("am-active")
+
+      $.get(`/api/v1/getUploadList?hid=${homework_id}`, function (res) {
+        // 重置列表内容
+        $("#tbody1").html("")
+
+        let data = res.data
+        if (data.length == 0) {
+          alert("暂时没有数据")
+        }
+
+        // 重置下载队列
+        downloadList = []
+        for (let i = 0; i < data.length; i++) {
+
+          // 加下载链接添加至待下载地址
+          if (data[i].url) {
+            downloadList.push(data[i].url)
+          }
+
+          // 格式化提交日期
+          let date = "/"
+          if (data[i].upload_time) {
+            date = formatDate(parseInt(data[i].upload_time + "000"))
+          }
+
+          // 重定义提交状态
+          let uploadStaus = data[i].is_upload == 1 ? "<td style='color: #5eb95e'>已提交</td>" :
+            "<td style='color: #dd514c;'>未提交</td>"
+
+          // 显示下载图标
+          let show = data[i].is_upload == 1 ? 'block' : 'none'
+
+          // 映射行数据
+          $("#tbody1").append(`<tr>
+                              <td>${data[i].id}</td>
+                              <td><a href="#">${data[i].stu_name}</a></td>
+                              <td>${data[i].stu_num}</td>
+                              ${uploadStaus}
+                              <td class="am-hide-sm-only">${date}</td>
+                              <td>
+                                <div style="display: ${show}">
+                                  <div class="am-btn-group am-btn-group-xs">
+                                    <button  type="button" class="am-btn am-btn-default am-radius" onclick="downloadAFile('${data[i].url}')">
+                                      <span class="am-icon-download"></span> 下载</button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>`)
+        }
+      })
+    }
+
+
+    // 编辑作业
+    function editHomeWork(id, title, describe) {
+      window.location.href =`/admin/edit-homework?id=${id}&title=${title}&describe=${describe}`;
+    }
+
+
+    function changeStatus(id, status) {
+      let changeS = status == 1 ? 0 : 1
+      $.post('/api/v1/changeStatus', {id, changeS}, function(res) {
+        window.location.reload()
+        alert("操作成功")
+      })
+    }
+
+
+    function getHomeworkList(page, limit) {
+      // 获取作业列表
+      $.get(`/api/v1/getHomework?page=${page}&limit=${limit}`, function (res) {
+        let data = res.data
+        if (data.length == 0) {
+          nowPage--;
+          alert("没有更多数据了！")
+        }
+        for (let i = 0; i < data.length; i++) {
+          ids.push(data[i].id);
+          let date = formatDate(parseInt(data[i].create_time + "000"));
+          let status = data[i].status == 1 ? "暂停" : '开启';
+          let uploadStaus = data[i].status == 1 ? "<td style='color: #5eb95e'>正常</td>" :
+            "<td style='color: #dd514c;'>不可提交</td>";
+          $("#tbody").append(`<tr id="tr_${data[i].id}">
+                              <td>${data[i].id}</td>
+                              <td><a href="#">${data[i].title}</a></td>
+                              <td>${data[i].describe}</td>
+                              <td>${data[i].addtional_name}</td>
+                              ${uploadStaus}
+                              <td>${data[i].deadline} 天</td>
+                              <td class="am-hide-sm-only">${date}</td>
+                              <td>
+                                <div class="">
+                                  <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default am-radius" onclick="showDetail(${data[i].id})">
+                                      <span class="am-icon-search"></span> 查看</button>
+                                  </div>
+                                  <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default am-radius" onclick="editHomeWork(${data[i].id}, '${data[i].title}', '${data[i].describe}')">
+                                      <span class="am-icon-hashtag"></span> 修改</button>
+                                  </div>
+                                  <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default am-radius" onclick="changeStatus(${data[i].id}, ${data[i].status})">
+                                      <span class="am-icon-unlink"></span> ${status}</button>
+                                  </div>
+                                  <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default am-radius" onclick="delHomeWork(${data[i].id})">
+                                      <span class="am-icon-trash"></span> 删除</button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>`)
+        }
+      })
+    }
+ 
+    var nowPage = 1
+    getHomeworkList(nowPage, 10)
+
+    function showMoreHomeWork() {
+      nowPage++
+      getHomeworkList(nowPage, 10)
+    }
+  </script>
+</body>
+
+</html>

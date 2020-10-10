@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Login-UFS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+  <link rel="alternate icon" type="image/png" href="static/i/favicon.png">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css" />
+
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+  <style>
+    .header {
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+
+    .header p {
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="am-g">
+      <h1>Upload File System</h1>
+      <br>
+      <!-- <p>Integrated Development Environment<br/>代码编辑，代码生成，界面设计，调试，编译</p> -->
+    </div>
+  </div>
+
+  <div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+
+      <div class="am-form">
+        <label for="email">学号:</label>
+        <input type="text" id="stu_num" value="97022001">
+        <br>
+        <label for="password">姓名:</label>
+        <input type="text" id="stu_name" value="" οnkeypress="enterPress()">
+        <br>
+      </div>
+      <br>
+      <button class="am-btn am-btn-secondary" onclick="login()">登 录</button>
+      <div style="padding-top: 8px;float: right;">
+        <p>©2020 Yellow.</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script type="text/javascript">
+    // 验证身份
+    function login() {
+      stu_name = $('#stu_name').val()
+      stu_num = $('#stu_num').val()
+      $.post("/api/v1/login", {
+        stu_name,
+        stu_num
+      }, function (res) {
+        if (res.code == 200) {
+          window.location.reload()
+        } else {
+          alert("学号与姓名不匹配")
+        }
+      })
+    }
+    
+    // 监听stu_name输入框
+    $('#stu_name').on("keydown", function (event) {
+      var keyCode = event.keyCode || event.which;
+      if (keyCode == "13") {
+        // event.preventDefault();
+        login()
+      }
+    });
+
+
+  </script>
+</body>
+
+</html>

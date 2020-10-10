@@ -1,0 +1,4 @@
+PyMySQL==0.9.3
+requests==2.22.0
+tornado==6.0.4
+urllib3==1.25.6
